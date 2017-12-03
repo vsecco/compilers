@@ -1,0 +1,11 @@
+/**@<parser.h>::**/
+
+extern FILE    *src;
+extern int     lookahead;
+void            E(void);
+void            R(void);
+void            T(void);
+void            F(void);
+void            Q(void);
+
+void match(int);

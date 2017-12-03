@@ -1,0 +1,12 @@
+/**@<gettoken.h>::**/
+
+enum {
+    ID = 1024,
+    DEC,
+    EQ,
+    NEQ,
+    GEQ,
+    LEQ,
+};
+
+int             gettoken(FILE *);

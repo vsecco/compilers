@@ -1,0 +1,133 @@
+/**@<parser.c>::**/
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <gettoken.h>
+#include <parser.h>
+
+int             lookahead;
+
+void
+match(int expected)
+{
+    if (expected == lookahead) {
+        lookahead = gettoken(src);
+    } else {
+        fprintf(stderr, "token mismatch\n");
+        fprintf(stderr, "expected %d ", expected);
+        fprintf(stderr, "whereas found %d\n", lookahead);
+        exit(-2);
+    }
+}
+
+/** Syntax definition **/
+
+/*
+ * C-like expression LL(1)-grammar
+ */
+
+/*
+ * E -> T R
+ */
+int isoplus(int oplus);
+void
+E(void)
+{
+	E_start:
+    T();
+    if(isoplus(lookahead))
+        match(lookahead);
+       goto E_start;
+}
+/*
+ * R -> addop T R | <>
+ */
+int isotimes(int otimes)
+{
+	switch (oplus) {
+	case '+':
+	case '-':
+	return oplus;
+	}
+	return 0;
+}
+
+
+void
+R(void)
+{
+	while(isoplus(lookahead))
+        match(lookahead);
+        T();
+       
+}
+/*
+ * T -> F Q
+ */
+void
+T(void)
+{
+    F();
+    Q();
+}
+/*
+ * Q -> mulop F Q | <>
+ */
+int isotimes (int otimes)
+{
+	switch (otimes) {
+	case '*':
+	case '/':
+	return otimes;
+	}
+	return 0;	
+}
+void
+Q(void)
+{
+	while
+        match(lookahead);
+        F();
+        Q();
+    default:
+        ;
+    }
+}
+/*
+ * F -> var asgnm | ct | (E)
+ */
+void
+F(void)
+{
+    switch (lookahead) {
+    case ID:
+        match(ID);
+        if (lookahead == '=') {
+            match('=');
+            E();
+        }
+        break;
+    case DEC:
+        match(DEC);
+        break;
+    default:
+        match('(');
+        E();
+        match(')');
+    }
+}
+/*
+ * addop -> '+' | '-' | "||" | == | != ...
+ */
+/*
+ * mulop -> '*' | '/' | && | %
+ */
+/*
+ * asgnm -> '='
+ */
+/*
+ * var   -> ID
+ */
+/*
+ * ct    -> DEC
+ */
